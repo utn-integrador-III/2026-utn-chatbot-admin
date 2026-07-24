@@ -1,0 +1,12 @@
+.card {
+  width: 100%;
+  border-radius: 22px;
+  background-color: #ffffff;
+  box-shadow: 0 50px 100px -15px rgba(11, 21, 49, 0.4);
+  max-height: 92vh;
+  overflow-y: auto;
+}
+
+.card--padded {
+  padding: 28px 30px;
+}
