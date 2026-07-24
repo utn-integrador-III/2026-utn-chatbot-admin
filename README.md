@@ -105,3 +105,71 @@ npm run build
 ```bash
 npm run preview
 ```
+
+## Estructura del proyecto
+
+La estructura del proyecto es la siguente:
+
+```text
+chatbot_admin/
+├── node_modules/
+├── public/
+│
+├── src/
+│   ├── assets/
+│   │   ├── images/
+│   │   └── icons/
+│   │
+│   ├── components/
+│   │   ├── layout/
+|   |   |   |── AuthLayout.tsx -- la imagen de fondo
+|   |   |   └── DashboardLayout.tsx
+│   │   ├── ui/
+|   |   |   ├── Button.tsx
+│   │   |   |── Input.tsx
+|   |   |   |── NovaMark.tsx
+|   |   |   └── Card.tsx
+│   │   └── Sidebar.tsx
+│   │
+│   ├── context/ -- Gestiona el estado global de autenticación y la sesión del usuario
+│   │   ├── AuthContext.tsx
+│   │   └── AuthContextBase.ts
+│   │
+│   ├── hooks/ -- Contiene lógica reutilizable para acceder a funcionalidades de la aplicación
+│   │   └── useAuth.ts
+│   │
+│   ├── pages/
+│   │   ├── login.tsx
+│   │   ├── register.tsx
+│   │   └── upload-archive.tsx
+│   │
+│   ├── routes/
+│   │   ├── AppRoutes.tsx
+│   │   └── ProtectedRoute.tsx
+│   │
+│   ├── services/
+│   │   ├── apiClient.ts
+│   │   ├── authService.ts
+│   │   └── fileService.ts
+│   │
+│   ├── styles/
+│   │
+│   ├── types/
+│   │   ├── file.ts
+│   │   └── user.ts
+│   │
+│   ├── App.css
+│   ├── App.tsx
+│   ├── index.css
+│   └── main.tsx
+│
+├── .gitignore
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── README.md
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
