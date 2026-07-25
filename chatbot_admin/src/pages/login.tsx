@@ -38,7 +38,7 @@ export default function Login() {
   }
 
   return (
-    <AuthLayout>
+   <AuthLayout subtitle="Acceso administrativo">
       <Card>
         <div className="login-header">
           <NovaMark />
