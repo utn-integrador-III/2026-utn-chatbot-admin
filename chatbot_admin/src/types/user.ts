@@ -6,26 +6,32 @@ export type Department =
   | 'Scholarships'
   | 'General';
 
+export type UserRole = 'admin' | 'super_admin';
+
 export interface AdminUser {
   id: string;
-  name: string;
+  full_name: string;
+  user_name: string;
   email: string;
-  department?: Department;
+  role: UserRole;
 }
 
 export interface LoginPayload {
-  email: string;
+  identifier: string;
   password: string;
 }
 
-export interface RegisterPayload {
-  name: string;
+export interface CreateAdminPayload {
+  full_name: string;
+  user_name: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  role?: UserRole;
 }
 
 export interface AuthResponse {
+  message: string;
+  admin: AdminUser;
   token: string;
-  user: AdminUser;
+  expires_at: string;
 }

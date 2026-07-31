@@ -1,30 +1,38 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5000/api';
+const SERVER_IP = '127.0.0.1';
+const SERVER_PORT = '5005';
+const BASE_URL = `http://${SERVER_IP}:${SERVER_PORT}`;
 
-export const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('nova_token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('nova_token');
-      localStorage.removeItem('nova_user');
-      window.location.href = '/login';
+function attachAuthToken(client: ReturnType<typeof axios.create>) {
+  client.interceptors.request.use((config) => {
+    const token = localStorage.getItem('nova_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-    return Promise.reject(error);
-  },
-);
+    return config;
+  });
+
+  client.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response?.status === 401) {
+        localStorage.removeItem('nova_token');
+        localStorage.removeItem('nova_user');
+        window.location.href = '/login';
+      }
+      return Promise.reject(error);
+    },
+  );
+}
+
+export const loginApiClient = axios.create({
+  baseURL: BASE_URL,
+  headers: { 'Content-Type': 'application/json' },
+});
+attachAuthToken(loginApiClient);
+
+export const ingestApiClient = axios.create({
+  baseURL: BASE_URL,
+});
+attachAuthToken(ingestApiClient);

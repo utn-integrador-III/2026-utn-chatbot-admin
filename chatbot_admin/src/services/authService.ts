@@ -1,19 +1,23 @@
-import { apiClient } from './apiClient';
-import type { LoginPayload, RegisterPayload, AuthResponse } from '../types/user';
+import { loginApiClient } from './apiClient';
+import type { LoginPayload, CreateAdminPayload, AuthResponse } from '../types/user';
 
 export const authService = {
   async login(payload: LoginPayload): Promise<AuthResponse> {
-    const { data } = await apiClient.post<AuthResponse>('/auth/login', payload);
+    const { data } = await loginApiClient.post<AuthResponse>('/login', payload);
     return data;
   },
 
-  async register(payload: RegisterPayload): Promise<AuthResponse> {
-    const { data } = await apiClient.post<AuthResponse>('/auth/register', payload);
+  async createAdmin(payload: CreateAdminPayload): Promise<AuthResponse> {
+    const { data } = await loginApiClient.post<AuthResponse>('/signup', payload);
     return data;
   },
 
-  async requestPasswordReset(email: string): Promise<void> {
-    await apiClient.post('/auth/forgot-password', { email });
+  async logoutRemote(): Promise<void> {
+    await loginApiClient.post('/logout');
+  },
+
+  async deleteUser(adminId: string): Promise<void> {
+    await loginApiClient.delete('/delete_user', { data: { admin_id: adminId } });
   },
 
   logout(): void {
