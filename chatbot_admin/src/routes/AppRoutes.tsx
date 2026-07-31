@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from '../pages/login';
+import SuperadminDashboard from '../pages/superadmin-dashboar';
 import ProtectedRoute from './ProtectedRoute';
 
 function AdminPlaceholder() {
@@ -11,6 +12,15 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<Login />} />
+
+      <Route
+        path="/superadmin"
+        element={
+          <ProtectedRoute allowedRoles={['super_admin']}>
+            <SuperadminDashboard />
+          </ProtectedRoute>
+        }
+      />
 
       <Route
         path="/admin"
