@@ -9,12 +9,12 @@ import Button from '../components/ui/Button';
 import NovaMark from '../components/ui/NovaMark';
 import chatbotLogo from '../assets/images/chabotLogo1.png';
 import { useAuth } from '../hooks/useAuth';
-import '../styles/Login.css';
+import '../styles/login.css';
 
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -22,23 +22,34 @@ export default function Login() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError('');
-    if (!email || !password) {
+
+    if (!identifier || !password) {
       setError('Completa usuario y contraseña.');
       return;
     }
+
     setIsLoading(true);
     try {
-      await login({ email, password });
-      navigate('/upload-archive');
-    } catch {
-      setError('Credenciales incorrectas. Inténtalo de nuevo.');
-    } finally {
-      setIsLoading(false);
+      const loggedInUser = await login({ identifier, password });
+      navigate(loggedInUser.role === 'super_admin' ? '/register' : '/admin');
+    } catch (err) {
+      if (err && typeof err === 'object' && 'response' in err) {
+         const axiosErr = err as { response?: { data?: { error?: string }; status?: number } };
+      if (axiosErr.response?.status === 401) {
+         setError('Usuario o contraseña incorrectos. Verifica tus datos.');
+      } else if (axiosErr.response?.status === 400) {
+        setError('Completa correctamente todos los campos.');
+      } else {
+        setError(axiosErr.response?.data?.error ?? 'Ocurrió un error al iniciar sesión.');
+      }
+      } else {
+        setError('No se pudo conectar con el servidor.');
+      }
     }
   }
 
   return (
-   <AuthLayout subtitle="Acceso administrativo">
+    <AuthLayout subtitle="Acceso administrativo">
       <Card>
         <div className="login-header">
           <NovaMark />
@@ -50,14 +61,14 @@ export default function Login() {
 
         <form onSubmit={handleSubmit} className="login-form" noValidate>
           <Input
-            label="Correo institucional"
+            label="Usuario o correo"
             hideLabel
-            type="email"
+            type="text"
             icon={<User size={16} color="white" />}
-            placeholder="Correo institucional"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            autoComplete="email"
+            placeholder="Usuario o correo institucional"
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
+            autoComplete="username"
           />
           <Input
             label="Contraseña"
@@ -80,10 +91,6 @@ export default function Login() {
             Iniciar sesión
           </Button>
         </form>
-
-        <p className="login-footer">
-          ¿No tienes cuenta todavía? <Link to="/register">Regístrate</Link>
-        </p>
 
         <div className="login-bottom-mark">
           <span>N</span>

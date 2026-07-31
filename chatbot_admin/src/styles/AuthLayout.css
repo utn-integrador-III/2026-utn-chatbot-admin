@@ -34,7 +34,7 @@
 
 .auth-layout__title {
   position: absolute;
-  left: 7vw;
+  left: 12vw;
   top: 50%;
   transform: translateY(-50%);
   max-width: 700px;
