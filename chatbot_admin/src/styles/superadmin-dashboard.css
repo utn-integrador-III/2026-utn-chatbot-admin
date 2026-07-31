@@ -1,0 +1,175 @@
+.sa-header {
+  margin-bottom: 24px;
+}
+
+.sa-title {
+  font-family: 'Sora', 'Inter', system-ui, sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: #f7f7f7;
+}
+
+.sa-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.sa-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.sa-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+}
+
+.sa-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background-color: #eef2fb;
+  color: #2d4fb8;
+  flex-shrink: 0;
+}
+
+.sa-stat-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0b1531;
+}
+
+.sa-stat-label {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.sa-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0b1531;
+  margin-bottom: 14px;
+}
+
+.sa-card {
+  padding: 22px 24px;
+  margin-bottom: 24px;
+}
+
+.sa-create-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.sa-create-form__full {
+  grid-column: 1 / -1;
+}
+
+.sa-create-error {
+  font-size: 13px;
+  color: #dc4c4c;
+  grid-column: 1 / -1;
+}
+
+.sa-create-success {
+  font-size: 13px;
+  color: #1f9d6b;
+  grid-column: 1 / -1;
+}
+
+.sa-create-btn {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #babdbe;
+}
+
+.sa-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.sa-table th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #94a3b8;
+  border-bottom: 1px solid #eef2fb;
+  padding: 8px 12px 8px 0;
+}
+
+.sa-table td {
+  padding: 12px 12px 12px 0;
+  border-bottom: 1px solid #eef2fb;
+  color: #0b1531;
+}
+
+.sa-role-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.sa-role-badge--admin {
+  background-color: #eef2fb;
+  color: #2d4fb8;
+}
+
+.sa-role-badge--super_admin {
+  background-color: #fff4e5;
+  color: #b06a12;
+}
+
+.sa-delete-btn {
+  border: none;
+  background: none;
+  color: #dc4c4c;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 6px;
+  display: flex;
+}
+
+.sa-delete-btn:hover {
+  background-color: #424d5e;
+}
+
+.sa-empty {
+  text-align: center;
+  padding: 24px;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.nova-mark {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nova-mark__text {
+  font-family: 'Sora', 'Inter', system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #898b93;
+}
+
+.nova-mark__icon {
+  object-fit: contain;
+  display: block;
+}
