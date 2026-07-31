@@ -31,7 +31,7 @@ export default function Login() {
     setIsLoading(true);
     try {
       const loggedInUser = await login({ identifier, password });
-      navigate(loggedInUser.role === 'super_admin' ? '/register' : '/admin');
+      navigate(loggedInUser.role === 'super_admin' ? '/superadmin' : '/admin');
     } catch (err) {
       if (err && typeof err === 'object' && 'response' in err) {
          const axiosErr = err as { response?: { data?: { error?: string }; status?: number } };
