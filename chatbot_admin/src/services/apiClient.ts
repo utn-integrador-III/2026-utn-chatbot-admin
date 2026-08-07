@@ -29,10 +29,12 @@ function attachAuthToken(client: ReturnType<typeof axios.create>) {
 export const loginApiClient = axios.create({
   baseURL: BASE_URL,
   headers: { 'Content-Type': 'application/json' },
+  timeout: 15000, 
 });
 attachAuthToken(loginApiClient);
 
 export const ingestApiClient = axios.create({
   baseURL: BASE_URL,
+  timeout: 30000,
 });
 attachAuthToken(ingestApiClient);
