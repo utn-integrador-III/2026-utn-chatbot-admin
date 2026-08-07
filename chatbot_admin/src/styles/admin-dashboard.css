@@ -1,0 +1,159 @@
+.ad-header-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 22px 26px;
+  margin-bottom: 18px;
+  box-sizing: border-box;
+}
+
+.ad-header-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0b1531;
+  line-height: 1.35;
+}
+
+.ad-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.ad-stat-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  box-sizing: border-box;
+}
+
+.ad-stat-label {
+  font-size: 11.5px;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.ad-stat-value {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0b1531;
+}
+
+.ad-stat-icon {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.ad-stat-value--online {
+  color: #1f9d6b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.ad-stat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background-color: #1f9d6b;
+  flex-shrink: 0;
+}
+
+.ad-upload-card {
+  padding: 22px 26px;
+  margin-bottom: 18px;
+  box-sizing: border-box;
+}
+
+.ad-dropzone {
+  border: 2px dashed #cbd5e1;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 26px 20px;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+  color: #64748b;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.ad-dropzone:hover,
+.ad-dropzone--active {
+  background-color: #f7f9fd;
+  border-color: #2d4fb8;
+}
+
+.ad-dropzone__icons {
+  display: flex;
+  gap: 8px;
+  color: #2d4fb8;
+}
+
+.ad-dropzone__text {
+  font-size: 13px;
+  max-width: 420px;
+}
+
+.ad-table-card {
+  padding: 22px 26px;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.ad-table-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0b1531;
+  margin-bottom: 14px;
+}
+
+.ad-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+}
+
+.ad-table th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #94a3b8;
+  background-color: #f7f9fd;
+  padding: 9px 12px;
+  border-bottom: 1px solid #eef2fb;
+  white-space: nowrap;
+}
+
+.ad-table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid #eef2fb;
+  color: #0b1531;
+  vertical-align: middle;
+}
+
+.ad-table tr:last-child td {
+  border-bottom: none;
+}
+
+.ad-file-icon {
+  color: #dc4c4c;
+  margin-right: 6px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.ad-empty {
+  text-align: center;
+  padding: 20px;
+  color: #94a3b8;
+  font-size: 13px;
+}
