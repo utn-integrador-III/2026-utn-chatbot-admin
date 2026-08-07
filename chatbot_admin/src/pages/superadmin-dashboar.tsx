@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Users, ShieldCheck, UserPlus, Trash2, LogOut } from 'lucide-react';
 import DashboardLayoutSA from '../components/layout/DashboardLayoutSA';
@@ -29,7 +29,17 @@ const MOCK_ADMINS: AdminUser[] = [
 
 export default function SuperadminDashboard() {
   const { logout } = useAuth();
-  const [admins, setAdmins] = useState<AdminUser[]>(MOCK_ADMINS);
+  const [admins, setAdmins] = useState<AdminUser[]>(() => {
+  const stored = localStorage.getItem('nova_admins_cache');
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch {
+      return MOCK_ADMINS;
+    }
+  }
+   return MOCK_ADMINS;
+ });
 
   const [fullName, setFullName] = useState('');
   const [userName, setUserName] = useState('');
@@ -41,6 +51,11 @@ export default function SuperadminDashboard() {
 
   const totalAdmins = admins.filter((a) => a.role === 'admin').length;
   const totalSuperAdmins = admins.filter((a) => a.role === 'super_admin').length;
+
+
+  useEffect(() => {
+  localStorage.setItem('nova_admins_cache', JSON.stringify(admins));
+ }, [admins]);
 
   async function handleCreate(e: FormEvent) {
     e.preventDefault();
@@ -205,14 +220,16 @@ export default function SuperadminDashboard() {
                     </span>
                   </td>
                   <td>
+                    {admin.role === 'admin' && (
                     <button
                       type="button"
                       className="sa-delete-btn"
                       onClick={() => handleDelete(admin)}
                       title="Eliminar"
-                    >
+                      >
                       <Trash2 size={16} />
-                    </button>
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}

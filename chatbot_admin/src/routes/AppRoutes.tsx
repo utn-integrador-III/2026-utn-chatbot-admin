@@ -1,11 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from '../pages/login';
 import SuperadminDashboard from '../pages/superadmin-dashboar';
+import AdminDashboard from '../pages/admin-dashboard';
 import ProtectedRoute from './ProtectedRoute';
-
-function AdminPlaceholder() {
-  return <div style={{ padding: 40 }}>Panel de administrador — próximamente.</div>;
-}
 
 export default function AppRoutes() {
   return (
@@ -26,7 +23,7 @@ export default function AppRoutes() {
         path="/admin"
         element={
           <ProtectedRoute allowedRoles={['admin']}>
-            <AdminPlaceholder />
+            <AdminDashboard />
           </ProtectedRoute>
         }
       />
