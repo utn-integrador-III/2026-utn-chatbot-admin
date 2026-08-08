@@ -7,6 +7,10 @@ on:
       - qa
       - main
 
+defaults:
+  run:
+    working-directory: chatbot_admin
+
 jobs:
   frontend-ci:
     runs-on: ubuntu-latest
@@ -20,6 +24,7 @@ jobs:
         with:
           node-version: 20
           cache: npm
+          cache-dependency-path: chatbot_admin/package-lock.json
 
       - name: Instalar dependencias
         run: npm ci
