@@ -13,14 +13,14 @@ describe('NovaMark', () => {
   });
 
   it('usa el tamaño por defecto de 40px', () => {
-    render(<NovaMark />);
-    const img = screen.getByRole('img');
+    const { container } = render(<NovaMark />);
+    const img = container.querySelector('img');
     expect(img).toHaveStyle({ width: '40px', height: '40px' });
   });
 
   it('respeta el tamaño personalizado cuando se pasa por prop', () => {
-    render(<NovaMark size={24} />);
-    const img = screen.getByRole('img');
+    const { container } = render(<NovaMark size={24} />);
+    const img = container.querySelector('img');
     expect(img).toHaveStyle({ width: '24px', height: '24px' });
   });
 });
