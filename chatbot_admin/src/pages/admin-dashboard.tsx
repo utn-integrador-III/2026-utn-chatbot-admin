@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import type { DragEvent } from 'react';
-import { UploadCloud, FileText, Clock, CheckCircle2 } from 'lucide-react';
-import AdminDashboardLayout from '../components/layout/AdminDashboardLayout';
+import { UploadCloud, FileText, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
+import AdminTopBar from '../components/layout/AdminTopBar';
 import Card from '../components/ui/Card';
 import chatbotLogo from '../assets/images/chabotLogo1.png';
 import { fileService } from '../services/fileService';
 import type { PdfFile } from '../services/fileService';
+import { formatDate } from '../utils/formatDate';
 import '../styles/admin-dashboard.css';
 
 export default function AdminDashboard() {
@@ -35,49 +36,49 @@ export default function AdminDashboard() {
   }
 
   useEffect(() => {
-  let cancelled = false;
+    let cancelled = false;
 
-  (async () => {
-    setIsLoading(true);
+    (async () => {
+      setIsLoading(true);
+      setError('');
+      try {
+        const list = await fileService.listPdfs();
+        if (!cancelled) setFiles(list);
+      } catch (err) {
+        if (cancelled) return;
+        if (err && typeof err === 'object' && 'response' in err) {
+          const axiosErr = err as { response?: { data?: { error?: string }; status?: number } };
+          setError(axiosErr.response?.data?.error ?? `No se pudo cargar la lista (${axiosErr.response?.status}).`);
+        } else {
+          setError('No se pudo conectar con el servidor.');
+        }
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  async function handleUpload(file: File) {
+    setIsUploading(true);
     setError('');
     try {
-      const list = await fileService.listPdfs();
-      if (!cancelled) setFiles(list);
+      await fileService.uploadPdf(file);
+      await loadFiles();
     } catch (err) {
-      if (cancelled) return;
       if (err && typeof err === 'object' && 'response' in err) {
         const axiosErr = err as { response?: { data?: { error?: string }; status?: number } };
-        setError(axiosErr.response?.data?.error ?? `No se pudo cargar la lista (${axiosErr.response?.status}).`);
+        setError(axiosErr.response?.data?.error ?? `No se pudo subir el archivo (${axiosErr.response?.status}).`);
       } else {
         setError('No se pudo conectar con el servidor.');
       }
     } finally {
-      if (!cancelled) setIsLoading(false);
+      setIsUploading(false);
     }
-  })();
-
-  return () => {
-    cancelled = true;
-  };
-}, []);
-
- async function handleUpload(file: File) {
-  setIsUploading(true);
-  setError('');
-  try {
-    await fileService.uploadPdf(file);
-    await loadFiles();
-  } catch (err) {
-    if (err && typeof err === 'object' && 'response' in err) {
-      const axiosErr = err as { response?: { data?: { error?: string }; status?: number } };
-      setError(axiosErr.response?.data?.error ?? `No se pudo subir el archivo (${axiosErr.response?.status}).`);
-    } else {
-      setError('No se pudo conectar con el servidor.');
-    }
-  } finally {
-    setIsUploading(false);
   }
-}
 
   function handleDrop(e: DragEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -86,10 +87,10 @@ export default function AdminDashboard() {
     if (dropped.length) handleUpload(dropped[0]);
   }
 
-  const lastUpdate = files[0]?.uploaded_at ?? '—';
+  const lastUpdate = formatDate(files[0]?.uploaded_at as string | undefined);
 
   return (
-    <AdminDashboardLayout>
+    <AdminTopBar>
       <Card className="ad-header-card">
         <img src={chatbotLogo} alt="" width={36} height={36} />
         <h1 className="ad-header-title">
@@ -155,47 +156,42 @@ export default function AdminDashboard() {
             />
           </div>
         </div>
-        {error && <p style={{ color: '#dc4c4c', fontSize: 13, marginTop: 12 }}>{error}</p>}
+        {error && (
+          <div className="ad-error-banner">
+            <AlertCircle size={16} className="ad-error-banner__icon" />
+            <span>{error}</span>
+          </div>
+        )}
       </Card>
 
-     <Card className="ad-table-card">
-  <h2 className="ad-table-title">Fuentes de Información Activas</h2>
-  {isLoading ? (
-    <p className="ad-empty">Cargando documentos...</p>
-  ) : files.length === 0 ? (
-    <p className="ad-empty">Todavía no hay documentos cargados.</p>
-  ) : (
-    <table className="ad-table">
-      <thead>
-        <tr>
-          <th>Nombre del archivo</th>
-          <th>Fecha de carga</th>
-        </tr>
-      </thead>
-      <tbody>
-        {files.map((file, idx) => (
-          <tr key={file.id ?? idx}>
-            <td>
-              <FileText size={15} className="ad-file-icon" />
-              {file.filename ?? 'Documento sin nombre'}
-            </td>
-            <td>
-              {file.uploaded_at
-                ? new Date(file.uploaded_at).toLocaleString('es-CR', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })
-                : '—'}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  )}
-</Card>
-    </AdminDashboardLayout>
+      <Card className="ad-table-card">
+        <h2 className="ad-table-title">Fuentes de Información Activas</h2>
+        {isLoading ? (
+          <p className="ad-empty">Cargando documentos...</p>
+        ) : files.length === 0 ? (
+          <p className="ad-empty">Todavía no hay documentos cargados.</p>
+        ) : (
+          <table className="ad-table">
+            <thead>
+              <tr>
+                <th>Nombre del archivo</th>
+                <th>Fecha de carga</th>
+              </tr>
+            </thead>
+            <tbody>
+              {files.map((file, idx) => (
+                <tr key={(file.id as string) ?? idx}>
+                  <td>
+                    <FileText size={15} className="ad-file-icon" />
+                    {file.filename ?? 'Documento sin nombre'}
+                  </td>
+                  <td>{formatDate(file.uploaded_at as string | undefined)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </Card>
+    </AdminTopBar>
   );
 }
