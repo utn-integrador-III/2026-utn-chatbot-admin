@@ -26,7 +26,7 @@ vi.mock('../components/ui/Card', () => ({
 }));
 
 vi.mock('../utils/formatDate', () => ({
-  formatDate: vi.fn((date?: string) => date ? '01/01/2026' : 'Sin fecha'),
+  formatDate: vi.fn((date?: string) => (date ? '01/01/2026' : 'Sin fecha')),
 }));
 
 describe('AdminDashboard', () => {
@@ -53,7 +53,7 @@ describe('AdminDashboard', () => {
     render(<AdminDashboard />);
 
     expect(
-      screen.getByText('Plataforma de Administración del Conocimiento NOVA — Panel Principal')
+      screen.getByText('Plataforma de Administración del Conocimiento NOVA — Panel Principal'),
     ).toBeInTheDocument();
 
     await waitFor(() => {
@@ -95,35 +95,25 @@ describe('AdminDashboard', () => {
     render(<AdminDashboard />);
 
     await waitFor(() => {
-      expect(
-        screen.getByText('Todavía no hay documentos cargados.')
-      ).toBeInTheDocument();
+      expect(screen.getByText('Todavía no hay documentos cargados.')).toBeInTheDocument();
     });
   });
 
   it('muestra el estado de carga mientras obtiene los documentos', () => {
-    vi.mocked(fileService.listPdfs).mockReturnValueOnce(
-      new Promise(() => {})
-    );
+    vi.mocked(fileService.listPdfs).mockReturnValueOnce(new Promise(() => {}));
 
     render(<AdminDashboard />);
 
-    expect(
-      screen.getByText('Cargando documentos...')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Cargando documentos...')).toBeInTheDocument();
   });
 
   it('muestra un error cuando no se pueden cargar los documentos', async () => {
-    vi.mocked(fileService.listPdfs).mockRejectedValueOnce(
-      new Error('Error de conexión')
-    );
+    vi.mocked(fileService.listPdfs).mockRejectedValueOnce(new Error('Error de conexión'));
 
     render(<AdminDashboard />);
 
     await waitFor(() => {
-      expect(
-        screen.getByText('No se pudo conectar con el servidor.')
-      ).toBeInTheDocument();
+      expect(screen.getByText('No se pudo conectar con el servidor.')).toBeInTheDocument();
     });
   });
 
@@ -137,15 +127,9 @@ describe('AdminDashboard', () => {
 
     render(<AdminDashboard />);
 
-    const input = document.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
+    const input = document.querySelector('input[type="file"]') as HTMLInputElement;
 
-    const file = new File(
-      ['contenido del pdf'],
-      'nuevo.pdf',
-      { type: 'application/pdf' }
-    );
+    const file = new File(['contenido del pdf'], 'nuevo.pdf', { type: 'application/pdf' });
 
     fireEvent.change(input, {
       target: {
@@ -172,15 +156,9 @@ describe('AdminDashboard', () => {
 
     render(<AdminDashboard />);
 
-    const input = document.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
+    const input = document.querySelector('input[type="file"]') as HTMLInputElement;
 
-    const file = new File(
-      ['contenido'],
-      'archivo.pdf',
-      { type: 'application/pdf' }
-    );
+    const file = new File(['contenido'], 'archivo.pdf', { type: 'application/pdf' });
 
     fireEvent.change(input, {
       target: {
@@ -189,9 +167,7 @@ describe('AdminDashboard', () => {
     });
 
     await waitFor(() => {
-      expect(
-        screen.getByText('El archivo no es válido')
-      ).toBeInTheDocument();
+      expect(screen.getByText('El archivo no es válido')).toBeInTheDocument();
     });
   });
 
@@ -201,9 +177,51 @@ describe('AdminDashboard', () => {
     render(<AdminDashboard />);
 
     await waitFor(() => {
-      expect(
-        screen.getByText('En línea / Sincronizado')
-      ).toBeInTheDocument();
+      expect(screen.getByText('En línea / Sincronizado')).toBeInTheDocument();
+    });
+  });
+
+  it('cubre el error con forma de respuesta en la carga inicial', async () => {
+    vi.mocked(fileService.listPdfs).mockRejectedValueOnce({
+      response: { status: 500, data: { error: 'Error del servidor' } },
+    });
+
+    render(<AdminDashboard />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Error del servidor')).toBeInTheDocument();
+    });
+  });
+
+  it('muestra error genérico (sin response) si falla la subida', async () => {
+    vi.mocked(fileService.listPdfs).mockResolvedValue([]);
+    vi.mocked(fileService.uploadPdf).mockRejectedValueOnce(new Error('network'));
+
+    render(<AdminDashboard />);
+
+    const input = document.querySelector('input[type="file"]') as HTMLInputElement;
+    const file = new File(['x'], 'a.pdf', { type: 'application/pdf' });
+    fireEvent.change(input, { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect(screen.getByText('No se pudo conectar con el servidor.')).toBeInTheDocument();
+    });
+  });
+
+  it('permite arrastrar y soltar un archivo sobre la zona de carga', async () => {
+    vi.mocked(fileService.listPdfs).mockResolvedValue([]);
+    vi.mocked(fileService.uploadPdf).mockResolvedValueOnce({ id: '1', filename: 'soltado.pdf' });
+
+    render(<AdminDashboard />);
+
+    const dropzone = document.querySelector('.ad-dropzone') as HTMLElement;
+    const file = new File(['x'], 'soltado.pdf', { type: 'application/pdf' });
+
+    fireEvent.dragOver(dropzone);
+    fireEvent.drop(dropzone, { dataTransfer: { files: [file] } });
+
+    await waitFor(() => {
+      expect(fileService.uploadPdf).toHaveBeenCalled();
     });
   });
 });

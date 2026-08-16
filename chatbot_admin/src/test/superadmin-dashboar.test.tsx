@@ -14,9 +14,7 @@ vi.mock('../services/authService', () => ({
 vi.mock('../hooks/useAuth');
 
 vi.mock('../components/layout/DashboardLayoutSA', () => ({
-  default: ({ children }: { children: React.ReactNode }) => (
-    <>{children}</>
-  ),
+  default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
 describe('SuperadminDashboard', () => {
@@ -45,91 +43,57 @@ describe('SuperadminDashboard', () => {
   it('renderiza el panel de super-administrador', () => {
     render(<SuperadminDashboard />);
 
-    expect(
-      screen.getByText('Panel de Super-administrador')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Panel de Super-administrador')).toBeInTheDocument();
 
-    expect(
-      screen.getByText('Gestiona las cuentas administrativas de NOVA.')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Gestiona las cuentas administrativas de NOVA.')).toBeInTheDocument();
   });
 
   it('muestra las cuentas iniciales', () => {
     render(<SuperadminDashboard />);
 
-    expect(
-      screen.getByText('Marco Campos')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Marco Campos')).toBeInTheDocument();
 
-    expect(
-      screen.getByText('Laura Montero')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Laura Montero')).toBeInTheDocument();
   });
 
   it('muestra correctamente las estadísticas', () => {
     render(<SuperadminDashboard />);
 
-    // 2 cuentas totales y 2 super-administradores
     expect(screen.getAllByText('2')).toHaveLength(2);
 
-    // 0 administradores normales
     expect(screen.getByText('0')).toBeInTheDocument();
 
-    expect(
-      screen.getByText('Cuentas totales')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Cuentas totales')).toBeInTheDocument();
 
-    expect(
-      screen.getByText('Administradores')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Administradores')).toBeInTheDocument();
 
-    expect(
-      screen.getByText('Super-administradores')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Super-administradores')).toBeInTheDocument();
   });
 
   it('muestra el formulario para crear una cuenta', () => {
     render(<SuperadminDashboard />);
 
-    expect(
-      screen.getByText('Crear nueva cuenta admin')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Crear nueva cuenta admin')).toBeInTheDocument();
 
-    expect(
-      screen.getByPlaceholderText('Nombre y apellidos')
-    ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Nombre y apellidos')).toBeInTheDocument();
 
-    expect(
-      screen.getByPlaceholderText('Nombre de usuario')
-    ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Nombre de usuario')).toBeInTheDocument();
 
-    expect(
-      screen.getByPlaceholderText('correo@utn.ac.cr')
-    ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('correo@utn.ac.cr')).toBeInTheDocument();
 
-    expect(
-      screen.getByPlaceholderText('••••••••')
-    ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('••••••••')).toBeInTheDocument();
 
-    expect(
-      screen.getByRole('button', { name: /Crear cuenta/i })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Crear cuenta/i })).toBeInTheDocument();
   });
 
   it('muestra error si se intenta crear una cuenta con campos vacíos', () => {
     render(<SuperadminDashboard />);
 
-    fireEvent.click(
-      screen.getByRole('button', { name: /Crear cuenta/i })
-    );
+    fireEvent.click(screen.getByRole('button', { name: /Crear cuenta/i }));
 
-    expect(
-      screen.getByText('Completa todos los campos.')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Completa todos los campos.')).toBeInTheDocument();
 
-    expect(
-      authService.createAdmin
-    ).not.toHaveBeenCalled();
+    expect(authService.createAdmin).not.toHaveBeenCalled();
   });
 
   it('crea una nueva cuenta correctamente', async () => {
@@ -148,45 +112,31 @@ describe('SuperadminDashboard', () => {
 
     render(<SuperadminDashboard />);
 
-    fireEvent.change(
-      screen.getByPlaceholderText('Nombre y apellidos'),
-      {
-        target: {
-          value: 'Juan Pérez',
-        },
-      }
-    );
+    fireEvent.change(screen.getByPlaceholderText('Nombre y apellidos'), {
+      target: {
+        value: 'Juan Pérez',
+      },
+    });
 
-    fireEvent.change(
-      screen.getByPlaceholderText('Nombre de usuario'),
-      {
-        target: {
-          value: 'juan.perez',
-        },
-      }
-    );
+    fireEvent.change(screen.getByPlaceholderText('Nombre de usuario'), {
+      target: {
+        value: 'juan.perez',
+      },
+    });
 
-    fireEvent.change(
-      screen.getByPlaceholderText('correo@utn.ac.cr'),
-      {
-        target: {
-          value: 'juan@utn.ac.cr',
-        },
-      }
-    );
+    fireEvent.change(screen.getByPlaceholderText('correo@utn.ac.cr'), {
+      target: {
+        value: 'juan@utn.ac.cr',
+      },
+    });
 
-    fireEvent.change(
-      screen.getByPlaceholderText('••••••••'),
-      {
-        target: {
-          value: '12345678',
-        },
-      }
-    );
+    fireEvent.change(screen.getByPlaceholderText('••••••••'), {
+      target: {
+        value: '12345678',
+      },
+    });
 
-    fireEvent.click(
-      screen.getByRole('button', { name: /Crear cuenta/i })
-    );
+    fireEvent.click(screen.getByRole('button', { name: /Crear cuenta/i }));
 
     await waitFor(() => {
       expect(authService.createAdmin).toHaveBeenCalledWith({
@@ -197,13 +147,9 @@ describe('SuperadminDashboard', () => {
       });
     });
 
-    expect(
-      await screen.findByText('Cuenta creada para Juan Pérez.')
-    ).toBeInTheDocument();
+    expect(await screen.findByText('Cuenta creada para Juan Pérez.')).toBeInTheDocument();
 
-    expect(
-      screen.getByText('Juan Pérez')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Juan Pérez')).toBeInTheDocument();
   });
 
   it('muestra el error enviado por el servidor al crear una cuenta', async () => {
@@ -218,109 +164,71 @@ describe('SuperadminDashboard', () => {
 
     render(<SuperadminDashboard />);
 
-    fireEvent.change(
-      screen.getByPlaceholderText('Nombre y apellidos'),
-      {
-        target: {
-          value: 'Juan Pérez',
-        },
-      }
-    );
+    fireEvent.change(screen.getByPlaceholderText('Nombre y apellidos'), {
+      target: {
+        value: 'Juan Pérez',
+      },
+    });
 
-    fireEvent.change(
-      screen.getByPlaceholderText('Nombre de usuario'),
-      {
-        target: {
-          value: 'juan.perez',
-        },
-      }
-    );
+    fireEvent.change(screen.getByPlaceholderText('Nombre de usuario'), {
+      target: {
+        value: 'juan.perez',
+      },
+    });
 
-    fireEvent.change(
-      screen.getByPlaceholderText('correo@utn.ac.cr'),
-      {
-        target: {
-          value: 'juan@utn.ac.cr',
-        },
-      }
-    );
+    fireEvent.change(screen.getByPlaceholderText('correo@utn.ac.cr'), {
+      target: {
+        value: 'juan@utn.ac.cr',
+      },
+    });
 
-    fireEvent.change(
-      screen.getByPlaceholderText('••••••••'),
-      {
-        target: {
-          value: '12345678',
-        },
-      }
-    );
+    fireEvent.change(screen.getByPlaceholderText('••••••••'), {
+      target: {
+        value: '12345678',
+      },
+    });
 
-    fireEvent.click(
-      screen.getByRole('button', { name: /Crear cuenta/i })
-    );
+    fireEvent.click(screen.getByRole('button', { name: /Crear cuenta/i }));
 
-    expect(
-      await screen.findByText('El usuario ya existe.')
-    ).toBeInTheDocument();
+    expect(await screen.findByText('El usuario ya existe.')).toBeInTheDocument();
   });
 
   it('muestra error de conexión al crear una cuenta', async () => {
-    vi.mocked(authService.createAdmin).mockRejectedValueOnce(
-      new Error('Network Error')
-    );
+    vi.mocked(authService.createAdmin).mockRejectedValueOnce(new Error('Network Error'));
 
     render(<SuperadminDashboard />);
 
-    fireEvent.change(
-      screen.getByPlaceholderText('Nombre y apellidos'),
-      {
-        target: {
-          value: 'Juan Pérez',
-        },
-      }
-    );
+    fireEvent.change(screen.getByPlaceholderText('Nombre y apellidos'), {
+      target: {
+        value: 'Juan Pérez',
+      },
+    });
 
-    fireEvent.change(
-      screen.getByPlaceholderText('Nombre de usuario'),
-      {
-        target: {
-          value: 'juan.perez',
-        },
-      }
-    );
+    fireEvent.change(screen.getByPlaceholderText('Nombre de usuario'), {
+      target: {
+        value: 'juan.perez',
+      },
+    });
 
-    fireEvent.change(
-      screen.getByPlaceholderText('correo@utn.ac.cr'),
-      {
-        target: {
-          value: 'juan@utn.ac.cr',
-        },
-      }
-    );
+    fireEvent.change(screen.getByPlaceholderText('correo@utn.ac.cr'), {
+      target: {
+        value: 'juan@utn.ac.cr',
+      },
+    });
 
-    fireEvent.change(
-      screen.getByPlaceholderText('••••••••'),
-      {
-        target: {
-          value: '12345678',
-        },
-      }
-    );
+    fireEvent.change(screen.getByPlaceholderText('••••••••'), {
+      target: {
+        value: '12345678',
+      },
+    });
 
-    fireEvent.click(
-      screen.getByRole('button', { name: /Crear cuenta/i })
-    );
+    fireEvent.click(screen.getByRole('button', { name: /Crear cuenta/i }));
 
-    expect(
-      await screen.findByText(
-        'No se pudo conectar con el servidor.'
-      )
-    ).toBeInTheDocument();
+    expect(await screen.findByText('No se pudo conectar con el servidor.')).toBeInTheDocument();
   });
 
   it('permite cancelar la eliminación de un administrador', () => {
-    const confirmMock = vi
-      .spyOn(window, 'confirm')
-      .mockReturnValue(false);
+    const confirmMock = vi.spyOn(window, 'confirm').mockReturnValue(false);
 
     localStorage.setItem(
       'nova_admins_cache',
@@ -346,7 +254,7 @@ describe('SuperadminDashboard', () => {
           email: 'juan@utn.ac.cr',
           role: 'admin',
         },
-      ])
+      ]),
     );
 
     render(<SuperadminDashboard />);
@@ -355,17 +263,11 @@ describe('SuperadminDashboard', () => {
 
     fireEvent.click(deleteButton);
 
-    expect(confirmMock).toHaveBeenCalledWith(
-      '¿Eliminar la cuenta de Juan Pérez?'
-    );
+    expect(confirmMock).toHaveBeenCalledWith('¿Eliminar la cuenta de Juan Pérez?');
 
-    expect(
-      authService.deleteUser
-    ).not.toHaveBeenCalled();
+    expect(authService.deleteUser).not.toHaveBeenCalled();
 
-    expect(
-      screen.getByText('Juan Pérez')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Juan Pérez')).toBeInTheDocument();
 
     confirmMock.mockRestore();
   });
@@ -373,9 +275,7 @@ describe('SuperadminDashboard', () => {
   it('cierra sesión al presionar Cerrar sesión', () => {
     render(<SuperadminDashboard />);
 
-    fireEvent.click(
-      screen.getByRole('button', { name: /Cerrar sesión/i })
-    );
+    fireEvent.click(screen.getByRole('button', { name: /Cerrar sesión/i }));
 
     expect(mockLogout).toHaveBeenCalled();
   });
@@ -391,6 +291,93 @@ describe('SuperadminDashboard', () => {
       const admins = JSON.parse(stored!);
 
       expect(admins).toHaveLength(2);
+    });
+  });
+
+  it('usa MOCK_ADMINS si el localStorage tiene JSON corrupto', () => {
+    localStorage.setItem('nova_admins_cache', '{json-invalido');
+
+    render(<SuperadminDashboard />);
+
+    expect(screen.getByText('Marco Campos')).toBeInTheDocument();
+  });
+
+  it('elimina la cuenta cuando se confirma y el backend responde bien', async () => {
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    vi.mocked(authService.deleteUser).mockResolvedValueOnce(undefined);
+
+    localStorage.setItem(
+      'nova_admins_cache',
+      JSON.stringify([
+        {
+          id: '3',
+          full_name: 'Juan Pérez',
+          user_name: 'juan.perez',
+          email: 'juan@utn.ac.cr',
+          role: 'admin',
+        },
+      ]),
+    );
+
+    render(<SuperadminDashboard />);
+    fireEvent.click(screen.getByTitle('Eliminar'));
+
+    await waitFor(() => {
+      expect(screen.queryByText('Juan Pérez')).not.toBeInTheDocument();
+    });
+  });
+
+  it('muestra alerta con el error del servidor si falla la eliminación', async () => {
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    vi.mocked(authService.deleteUser).mockRejectedValueOnce({
+      response: { status: 403, data: { error: 'No tienes permiso.' } },
+    });
+
+    localStorage.setItem(
+      'nova_admins_cache',
+      JSON.stringify([
+        {
+          id: '3',
+          full_name: 'Juan Pérez',
+          user_name: 'juan.perez',
+          email: 'juan@utn.ac.cr',
+          role: 'admin',
+        },
+      ]),
+    );
+
+    render(<SuperadminDashboard />);
+    fireEvent.click(screen.getByTitle('Eliminar'));
+
+    await waitFor(() => {
+      expect(alertSpy).toHaveBeenCalledWith('No tienes permiso.');
+    });
+  });
+
+  it('muestra alerta genérica si falla la conexión al eliminar', async () => {
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    vi.mocked(authService.deleteUser).mockRejectedValueOnce(new Error('network'));
+
+    localStorage.setItem(
+      'nova_admins_cache',
+      JSON.stringify([
+        {
+          id: '3',
+          full_name: 'Juan Pérez',
+          user_name: 'juan.perez',
+          email: 'juan@utn.ac.cr',
+          role: 'admin',
+        },
+      ]),
+    );
+
+    render(<SuperadminDashboard />);
+    fireEvent.click(screen.getByTitle('Eliminar'));
+
+    await waitFor(() => {
+      expect(alertSpy).toHaveBeenCalledWith('No se pudo conectar con el servidor para eliminar la cuenta.');
     });
   });
 });
