@@ -1,0 +1,86 @@
+.login-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.login-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: #13224c;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.login-subtitle {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #64748b;
+  margin-bottom: 22px;
+  text-align: center;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-error {
+  font-size: 13px;
+  color: #dc4c4c;
+  text-align: left;
+}
+
+.login-forgot {
+  text-align: right;
+  margin-top: -8px;
+}
+
+.login-forgot a {
+  font-size: 12px;
+  font-weight: 500;
+  color: #2d4fb8;
+}
+
+.login-forgot a:hover {
+  text-decoration: underline;
+}
+
+.login-footer {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 12.5px;
+  color: #64748b;
+}
+
+.login-footer a {
+  font-weight: 600;
+  color: #2d4fb8;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+.login-bottom-mark {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  margin-top: 20px;
+}
+
+.login-bottom-mark span {
+  font-family: 'Sora', 'Inter', system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0b1531;
+  letter-spacing: 0.5px;
+}
+
+.login-bottom-mark img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}

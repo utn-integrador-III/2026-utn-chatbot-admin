@@ -1,0 +1,18 @@
+.nova-mark {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nova-mark__text {
+  font-family: 'Sora', 'Inter', system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #0b1531;
+}
+
+.nova-mark__icon {
+  object-fit: contain;
+  display: block;
+}
